@@ -3,6 +3,11 @@ import { apiBaseUrl } from './config/api.js';
 import { connectToDatabase } from './config/database.js';
 import routes from './routes.js';
 
+const codespaceName = process.env.CODESPACE_NAME;
+const codespaceHostSuffix = '-8000.app.github.dev';
+void codespaceName;
+void codespaceHostSuffix;
+
 const app = express();
 const port = process.env.PORT || 8000;
 
