@@ -4,6 +4,7 @@ import Leaderboard from './components/Leaderboard.jsx';
 import Teams from './components/Teams.jsx';
 import Users from './components/Users.jsx';
 import Workouts from './components/Workouts.jsx';
+import { getApiBaseUrl } from './components/api.js';
 import './App.css';
 
 const navItems = [
@@ -16,10 +17,7 @@ const navItems = [
 ];
 
 function App() {
-  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
-  const baseUrl = codespaceName
-    ? `https://${codespaceName}-8000.app.github.dev/api`
-    : 'http://localhost:8000/api';
+  const baseUrl = getApiBaseUrl();
 
   return (
     <main className="container py-4 py-lg-5">
@@ -31,8 +29,8 @@ function App() {
             Explore activities, teams, leaderboard results, members, and workout ideas from the backend API.
           </p>
           <div className="alert alert-info mb-0" role="status">
-            <strong>Tip:</strong> define <code>VITE_CODESPACE_NAME</code> in <code>.env.local</code> for Codespaces URLs.
-            Without it, the app falls back to <code>{baseUrl}</code>.
+            <strong>Tip:</strong> in GitHub Codespaces, the app derives the backend URL from the current browser address.
+            For local development, it falls back to <code>{baseUrl}</code>.
           </div>
         </div>
         <div className="col-lg-5">

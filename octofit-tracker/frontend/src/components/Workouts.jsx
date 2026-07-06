@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { fetchCollection } from './api.js';
 
+const WORKOUTS_ENDPOINT = '/api/workouts/';
+
 function Workouts() {
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +13,7 @@ function Workouts() {
 
     const loadWorkouts = async () => {
       try {
-        const data = await fetchCollection('workouts');
+        const data = await fetchCollection(WORKOUTS_ENDPOINT);
         if (!cancelled) {
           setWorkouts(data);
         }

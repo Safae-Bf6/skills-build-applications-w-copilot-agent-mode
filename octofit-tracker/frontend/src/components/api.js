@@ -21,14 +21,24 @@ const normalizePayload = (payload) => {
 };
 
 export const getApiBaseUrl = () => {
-  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
+  if (typeof window === 'undefined') {
+    return 'http://localhost:8000';
+  }
 
-  return codespaceName
-    ? `https://${codespaceName}-8000.app.github.dev`
-    : 'http://localhost:8000';
+  const hostname = window.location.hostname;
+
+  if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]') {
+    return 'http://localhost:8000';
+  }
+
+  if (hostname.includes('app.github.dev')) {
+    return `https://${hostname.replace(/-5173(?=\.|$)/, '-8000')}`;
+  }
+
+  return 'http://localhost:8000';
 };
 
-export const buildApiUrl = (resource) => `${getApiBaseUrl()}/api/${resource}/`;
+export const buildApiUrl = (resource) => `${getApiBaseUrl()}/api/${resource}`;
 
 export const fetchCollection = async (resource) => {
   const response = await fetch(buildApiUrl(resource));

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { fetchCollection } from './api.js';
 
+const TEAMS_ENDPOINT = '/api/teams/';
+
 function Teams() {
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +13,7 @@ function Teams() {
 
     const loadTeams = async () => {
       try {
-        const data = await fetchCollection('teams');
+        const data = await fetchCollection(TEAMS_ENDPOINT);
         if (!cancelled) {
           setTeams(data);
         }

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { fetchCollection } from './api.js';
 
+const LEADERBOARD_ENDPOINT = '/api/leaderboard/';
+
 function Leaderboard() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +13,7 @@ function Leaderboard() {
 
     const loadEntries = async () => {
       try {
-        const data = await fetchCollection('leaderboard');
+        const data = await fetchCollection(LEADERBOARD_ENDPOINT);
         if (!cancelled) {
           setEntries(data);
         }

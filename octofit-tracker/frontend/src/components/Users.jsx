@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { fetchCollection } from './api.js';
 
+const USERS_ENDPOINT = '/api/users/';
+
 function Users() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +13,7 @@ function Users() {
 
     const loadUsers = async () => {
       try {
-        const data = await fetchCollection('users');
+        const data = await fetchCollection(USERS_ENDPOINT);
         if (!cancelled) {
           setUsers(data);
         }
