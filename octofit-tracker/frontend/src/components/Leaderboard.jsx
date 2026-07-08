@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchCollection } from './api.js';
+import { getApiBaseUrl } from './api.js';
 
 function Leaderboard() {
   const [entries, setEntries] = useState([]);
@@ -11,9 +11,17 @@ function Leaderboard() {
 
     const loadEntries = async () => {
       try {
-        const data = await fetchCollection('/api/leaderboard/');
+        const response = await fetch(`${getApiBaseUrl()}/api/leaderboard/`);
+
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+
+        const data = await response.json();
+        const normalizedData = Array.isArray(data) ? data : data?.results || data?.items || data?.data || [];
+
         if (!cancelled) {
-          setEntries(data);
+          setEntries(normalizedData);
         }
       } catch (err) {
         if (!cancelled) {
