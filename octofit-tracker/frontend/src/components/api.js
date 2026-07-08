@@ -36,14 +36,12 @@ const normalizePayload = (payload) => {
 
 const normalizeResource = (resource = '') => {
   const trimmedResource = resource.trim();
-  const withoutLeadingSlash = trimmedResource.startsWith('/') ? trimmedResource.slice(1) : trimmedResource;
 
-  if (!withoutLeadingSlash) {
-    return 'api/';
+  if (!trimmedResource) {
+    return '/';
   }
 
-  const withApiPrefix = withoutLeadingSlash.startsWith('api/') ? withoutLeadingSlash : `api/${withoutLeadingSlash}`;
-  return `${withApiPrefix.replace(/\/+$/, '')}/`;
+  return trimmedResource.startsWith('/') ? trimmedResource : `/${trimmedResource}`;
 };
 
 export const getApiBaseUrl = () => {
@@ -72,7 +70,7 @@ export const getApiBaseUrl = () => {
 
 export const buildApiUrl = (resource) => {
   const normalizedResource = normalizeResource(resource);
-  return `${getApiBaseUrl()}${normalizedResource.startsWith('/') ? normalizedResource : `/${normalizedResource}`}`;
+  return `${getApiBaseUrl()}${normalizedResource}`;
 };
 
 export const fetchCollection = async (resource) => {

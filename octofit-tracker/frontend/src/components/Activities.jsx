@@ -11,7 +11,7 @@ function Activities() {
 
     const loadActivities = async () => {
       try {
-        const data = await fetchCollection('activities');
+        const data = await fetchCollection('/api/activities/');
         if (!cancelled) {
           setActivities(data);
         }

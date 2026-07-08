@@ -11,7 +11,7 @@ function Users() {
 
     const loadUsers = async () => {
       try {
-        const data = await fetchCollection('users');
+        const data = await fetchCollection('/api/users/');
         if (!cancelled) {
           setUsers(data);
         }

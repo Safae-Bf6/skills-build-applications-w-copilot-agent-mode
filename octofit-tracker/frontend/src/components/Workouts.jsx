@@ -11,7 +11,7 @@ function Workouts() {
 
     const loadWorkouts = async () => {
       try {
-        const data = await fetchCollection('workouts');
+        const data = await fetchCollection('/api/workouts/');
         if (!cancelled) {
           setWorkouts(data);
         }
