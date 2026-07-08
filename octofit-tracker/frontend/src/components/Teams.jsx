@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fetchCollection } from './api.js';
 
-const TEAMS_ENDPOINT = '/api/teams/';
-
 function Teams() {
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +11,7 @@ function Teams() {
 
     const loadTeams = async () => {
       try {
-        const data = await fetchCollection(TEAMS_ENDPOINT);
+        const data = await fetchCollection('teams');
         if (!cancelled) {
           setTeams(data);
         }
@@ -49,8 +47,12 @@ function Teams() {
         {error && <div className="alert alert-danger">{error}</div>}
 
         {!loading && !error && (
-          <div className="row g-3">
-            {teams.map((team) => (
+          <>
+            {teams.length === 0 ? (
+              <p className="text-muted mb-0">No teams available yet.</p>
+            ) : (
+              <div className="row g-3">
+                {teams.map((team) => (
               <div key={team._id || team.id} className="col-md-6">
                 <div className="border rounded p-3 h-100">
                   <div className="fw-semibold">{team.name || team.teamName || 'Team'}</div>
@@ -58,8 +60,10 @@ function Teams() {
                   <div className="small text-muted">Members: {team.members?.length || 0}</div>
                 </div>
               </div>
-            ))}
-          </div>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>

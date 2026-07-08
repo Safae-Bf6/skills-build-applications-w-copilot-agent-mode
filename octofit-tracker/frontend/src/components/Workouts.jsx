@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fetchCollection } from './api.js';
 
-const WORKOUTS_ENDPOINT = '/api/workouts/';
-
 function Workouts() {
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +11,7 @@ function Workouts() {
 
     const loadWorkouts = async () => {
       try {
-        const data = await fetchCollection(WORKOUTS_ENDPOINT);
+        const data = await fetchCollection('workouts');
         if (!cancelled) {
           setWorkouts(data);
         }
@@ -49,8 +47,12 @@ function Workouts() {
         {error && <div className="alert alert-danger">{error}</div>}
 
         {!loading && !error && (
-          <div className="row g-3">
-            {workouts.map((workout) => (
+          <>
+            {workouts.length === 0 ? (
+              <p className="text-muted mb-0">No workout suggestions available yet.</p>
+            ) : (
+              <div className="row g-3">
+                {workouts.map((workout) => (
               <div key={workout._id || workout.id} className="col-md-6">
                 <div className="border rounded p-3 h-100">
                   <div className="fw-semibold">{workout.title || workout.name || 'Workout'}</div>
@@ -58,8 +60,10 @@ function Workouts() {
                   <div className="small text-muted">Focus: {workout.focus || 'General fitness'}</div>
                 </div>
               </div>
-            ))}
-          </div>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>

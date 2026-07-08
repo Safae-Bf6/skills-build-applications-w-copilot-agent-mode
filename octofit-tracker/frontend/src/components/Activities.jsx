@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fetchCollection } from './api.js';
 
-const ACTIVITIES_ENDPOINT = '/api/activities/';
-
 function Activities() {
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +11,7 @@ function Activities() {
 
     const loadActivities = async () => {
       try {
-        const data = await fetchCollection(ACTIVITIES_ENDPOINT);
+        const data = await fetchCollection('activities');
         if (!cancelled) {
           setActivities(data);
         }
@@ -31,6 +29,7 @@ function Activities() {
     loadActivities();
 
     return () => {
+      
       cancelled = true;
     };
   }, []);
@@ -49,8 +48,12 @@ function Activities() {
         {error && <div className="alert alert-danger">{error}</div>}
 
         {!loading && !error && (
-          <div className="list-group">
-            {activities.map((activity) => (
+          <>
+            {activities.length === 0 ? (
+              <p className="text-muted mb-0">No activities available yet.</p>
+            ) : (
+              <div className="list-group">
+                {activities.map((activity) => (
               <div key={activity._id || activity.id} className="list-group-item">
                 <div className="d-flex justify-content-between align-items-start gap-3">
                   <div>
@@ -63,8 +66,10 @@ function Activities() {
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>

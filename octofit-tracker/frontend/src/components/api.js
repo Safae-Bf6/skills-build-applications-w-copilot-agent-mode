@@ -4,23 +4,55 @@ const normalizePayload = (payload) => {
   }
 
   if (payload && typeof payload === 'object') {
-    const arrayKeys = ['results', 'items', 'data', 'docs', 'records'];
+    const candidates = [
+      payload.results,
+      payload.items,
+      payload.data,
+      payload.docs,
+      payload.records,
+      payload.results?.results,
+      payload.data?.results,
+    ];
 
-    for (const key of arrayKeys) {
-      if (Array.isArray(payload[key])) {
-        return payload[key];
+    for (const candidate of candidates) {
+      if (Array.isArray(candidate)) {
+        return candidate;
       }
     }
 
-    if (payload.pagination && Array.isArray(payload.pagination.results)) {
-      return payload.pagination.results;
+    if (payload.pagination) {
+      const paginationCandidates = [payload.pagination.results, payload.pagination.items, payload.pagination.data];
+
+      for (const candidate of paginationCandidates) {
+        if (Array.isArray(candidate)) {
+          return candidate;
+        }
+      }
     }
   }
 
   return [];
 };
 
+const normalizeResource = (resource = '') => {
+  const trimmedResource = resource.trim();
+  const withoutLeadingSlash = trimmedResource.startsWith('/') ? trimmedResource.slice(1) : trimmedResource;
+
+  if (!withoutLeadingSlash) {
+    return 'api/';
+  }
+
+  const withApiPrefix = withoutLeadingSlash.startsWith('api/') ? withoutLeadingSlash : `api/${withoutLeadingSlash}`;
+  return `${withApiPrefix.replace(/\/+$/, '')}/`;
+};
+
 export const getApiBaseUrl = () => {
+  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
+
+  if (codespaceName) {
+    return `https://${codespaceName}-8000.app.github.dev`;
+  }
+
   if (typeof window === 'undefined') {
     return 'http://localhost:8000';
   }
@@ -39,8 +71,8 @@ export const getApiBaseUrl = () => {
 };
 
 export const buildApiUrl = (resource) => {
-  const normalizedResource = resource.startsWith('/') ? resource : `/api/${resource}`;
-  return `${getApiBaseUrl()}${normalizedResource}`;
+  const normalizedResource = normalizeResource(resource);
+  return `${getApiBaseUrl()}${normalizedResource.startsWith('/') ? normalizedResource : `/${normalizedResource}`}`;
 };
 
 export const fetchCollection = async (resource) => {

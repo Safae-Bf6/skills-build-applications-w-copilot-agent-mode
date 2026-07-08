@@ -18,6 +18,8 @@ const navItems = [
 
 function App() {
   const baseUrl = getApiBaseUrl();
+  const codespaceName = import.meta.env.VITE_CODESPACE_NAME?.trim();
+  const backendHint = codespaceName ? `https://${codespaceName}-8000.app.github.dev/api` : baseUrl;
 
   return (
     <main className="container py-4 py-lg-5">
@@ -29,8 +31,8 @@ function App() {
             Explore activities, teams, leaderboard results, members, and workout ideas from the backend API.
           </p>
           <div className="alert alert-info mb-0" role="status">
-            <strong>Tip:</strong> in GitHub Codespaces, the app derives the backend URL from the current browser address.
-            For local development, it falls back to <code>{baseUrl}</code>.
+            <strong>Tip:</strong> define <code>VITE_CODESPACE_NAME</code> in <code>.env.local</code> to target your Codespaces backend.
+            The app will use <code>{backendHint}</code> when it is available, otherwise it falls back to <code>{baseUrl}</code>.
           </div>
         </div>
         <div className="col-lg-5">

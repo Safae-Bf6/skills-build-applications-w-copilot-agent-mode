@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fetchCollection } from './api.js';
 
-const LEADERBOARD_ENDPOINT = '/api/leaderboard/';
-
 function Leaderboard() {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -13,7 +11,7 @@ function Leaderboard() {
 
     const loadEntries = async () => {
       try {
-        const data = await fetchCollection(LEADERBOARD_ENDPOINT);
+        const data = await fetchCollection('leaderboard');
         if (!cancelled) {
           setEntries(data);
         }
@@ -49,8 +47,12 @@ function Leaderboard() {
         {error && <div className="alert alert-danger">{error}</div>}
 
         {!loading && !error && (
-          <div className="list-group">
-            {entries.map((entry, index) => (
+          <>
+            {entries.length === 0 ? (
+              <p className="text-muted mb-0">No leaderboard entries yet.</p>
+            ) : (
+              <div className="list-group">
+                {entries.map((entry, index) => (
               <div key={entry._id || entry.id || `${entry.user?.name}-${index}`} className="list-group-item d-flex justify-content-between align-items-center">
                 <div>
                   <div className="fw-semibold">#{index + 1} {entry.user?.name || entry.name || 'Member'}</div>
@@ -58,8 +60,10 @@ function Leaderboard() {
                 </div>
                 <span className="badge bg-primary rounded-pill">{entry.rank || index + 1}</span>
               </div>
-            ))}
-          </div>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>
