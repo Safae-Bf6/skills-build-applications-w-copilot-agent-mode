@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express from 'express';
 import { apiBaseUrl } from './config/api.js';
 import { connectToDatabase } from './config/database.js';
@@ -11,6 +12,7 @@ void codespaceHostSuffix;
 const app = express();
 const port = process.env.PORT || 8000;
 
+app.use(cors());
 app.use(express.json());
 app.use(routes);
 
