@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getApiBaseUrl } from './api.js';
+import { getApiBaseUrl } from '../api.js';
 
 function Teams() {
   const [teams, setTeams] = useState([]);

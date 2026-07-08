@@ -4,7 +4,7 @@ import Leaderboard from './components/Leaderboard.jsx';
 import Teams from './components/Teams.jsx';
 import Users from './components/Users.jsx';
 import Workouts from './components/Workouts.jsx';
-import { getApiBaseUrl } from './components/api.js';
+import { getApiBaseUrl } from './api.js';
 import './App.css';
 
 const navItems = [
